@@ -1,0 +1,24 @@
+{
+  "name": "breakout",
+  "version": "0.0.1",
+  "description": "Assignment 2 for CIS580 at KSU.",
+  "main": "game.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "echo \\\"Error: no test specified\\\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/svitaluc/breakout.git"
+  },
+  "author": "svitaluc",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/svitaluc/breakout/issues"
+  },
+  "homepage": "https://github.com/svitaluc/breakout#readme",
+  "devDependencies": {
+    "react-scripts": "^1.0.13"
+  }
+}
