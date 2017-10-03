@@ -2,9 +2,9 @@
  * The wall of bricks in a breakout game
  */
 export default class Wall {
-    constructor(){
+    constructor(bricksPerRow){
         this.wall = [];
-        this.bricksPerRow = 8;
+        this.bricksPerRow = bricksPerRow;
         for(var i = 0; i < 8; i++) {
             this.wall[i] = [];
             for (var j = 0; j < this.bricksPerRow; j++) {
@@ -15,10 +15,15 @@ export default class Wall {
         // Bind class functions
         this.update = this.update.bind(this);
         this.render = this.render.bind(this);
+        this.getWall = this.getWall.bind(this);
     }
 
-    update(){
+    getWall(){
+        return this.wall;
+    }
 
+    update(collisionBrick){
+        this.wall[collisionBrick.x][collisionBrick.y] = false;
     }
 
     render(ctx){

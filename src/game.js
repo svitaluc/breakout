@@ -2,6 +2,7 @@
 import Paddle from './paddle.js';
 import Wall from './wall.js';
 import Ball from './ball.js';
+import TextBar from './textBar.js';
 
 /** @class Game
  * Represents a breakout game
@@ -11,9 +12,11 @@ export default class Game {
         this.width = 800;
         this.height = 500;
         this.paddle = new Paddle(this.width, this.height);
-        this.wall = new Wall();
-        this.ball = new Ball(this.width, this.height);
+        this.wall = new Wall(8);
+        this.ball = new Ball(this.width, this.height, 8);
+        this.textBar = new TextBar(this.width, this.height);
         this.inputMove =  's';
+        this.score = 0;
 
         // Create the back buffer canvas
         this.backBufferCanvas = document.createElement('canvas');
@@ -37,12 +40,23 @@ export default class Game {
         window.onkeydown = this.handleKeyDow;
 
         // Start the game loop
-        this.interval = setInterval(this.loop, 50);
+        // this.interval = setInterval(this.loop, 10);
+        this.loop();
+        this.textBar.render(this.backBufferContext);
     }
 
     update(){
+        console.log(this.inputMove);
         this.paddle.update(this.inputMove);
-        this.ball.update(this.paddle.getX(), this.paddle.getWidth());
+        this.result = this.ball.update(this.paddle.getX(), this.paddle.getHalfWidth(), this.inputMove, this.wall.getWall());
+        if(this.result.collisionBrick) {
+            this.wall.update(this.result.collisionBrick);
+            this.score += (7 - this.result.collisionBrick.x);
+            if(this.result.collisionBrick.x % 2 === 1){
+                this.score += 1;
+            }
+            this.textBar.update(this.score);
+        }
         this.inputMove = 's';
     }
 
@@ -55,12 +69,20 @@ export default class Game {
         this.paddle.render(this.backBufferContext);
         this.wall.render(this.backBufferContext);
         this.ball.render(this.backBufferContext);
+        if(this.result.collisionBrick) {
+            this.textBar.render(this.backBufferContext);
+        }
         this.screenBufferContext.drawImage(this.backBufferCanvas,0,0);
     }
 
     loop() {
         this.update();
         this.render();
+        if(this.result.over){
+            //TODO ukaz gameover
+            return;
+        }
+        requestAnimationFrame(this.loop);
     }
 
     handleKeyDown(event) {
