@@ -14,6 +14,17 @@ export default class Ball {
         this.update = this.update.bind(this);
         this.render = this.render.bind(this);
         this.hasCollision = this.hasCollision.bind(this);
+        this.resetBall = this.resetBall.bind(this);
+        this.getPosition = this.getPosition.bind(this);
+    }
+
+    getPosition(){
+        return this.position;
+    }
+
+    resetBall(){
+        this.position = {x: this.canvasWidth/2, y: this.canvasHeight - 80};
+        this.direction = {x: 3, y: -3};
     }
 
     hasCollision(wall){
@@ -40,7 +51,7 @@ export default class Ball {
     update(paddleX, paddleHalfWidth, move, wall){
         var result = {
             collisionBrick: null,
-            over: false
+            ballDown: false
         };
         if(this.position.x + this.direction.x < this.radius
             || this.position.x + this.direction.x > this.canvasWidth-this.radius) {
@@ -58,7 +69,7 @@ export default class Ball {
             }
             else {
                 if(this.position.y + this.direction.y > this.canvasHeight-40) {
-                    result.over = true;
+                    result.ballDown = true;
                 }
             }
         }

@@ -6,7 +6,7 @@ export default class Paddle {
         this.position = {x: canvasWidth/2, y: canvasHeight - 70};
         this.paddleHalfWidth = canvasWidth/10;
         this.canvasWidth = canvasWidth;
-        this.stepChange = 30;
+        this.stepChange = 10;
 
         // Bind class functions
         this.update = this.update.bind(this);

@@ -5,6 +5,7 @@ export default class Wall {
     constructor(bricksPerRow){
         this.wall = [];
         this.bricksPerRow = bricksPerRow;
+        this.remainingBricks = bricksPerRow * 8;
         for(var i = 0; i < 8; i++) {
             this.wall[i] = [];
             for (var j = 0; j < this.bricksPerRow; j++) {
@@ -16,14 +17,27 @@ export default class Wall {
         this.update = this.update.bind(this);
         this.render = this.render.bind(this);
         this.getWall = this.getWall.bind(this);
+        this.resetWall = this.resetWall.bind(this);
     }
 
     getWall(){
         return this.wall;
     }
 
+    resetWall(){
+        for(var i = 0; i < 8; i++) {
+            this.wall[i] = [];
+            for (var j = 0; j < this.bricksPerRow; j++) {
+                this.wall[i][j] = true;
+            }
+        }
+        this.remainingBricks = this.bricksPerRow * 8;
+    }
+
     update(collisionBrick){
         this.wall[collisionBrick.x][collisionBrick.y] = false;
+        this.remainingBricks--;
+        return this.remainingBricks;
     }
 
     render(ctx){
