@@ -40,7 +40,6 @@ export default class Game {
         // Start the game loop
         // this.interval = setInterval(this.loop, 10);
         this.loop();
-        this.textBar.render(this.backBufferContext, this.score, this.lives);
     }
 
     resetVariables(){
@@ -52,6 +51,8 @@ export default class Game {
         this.remainingBricks = 8*8;
         this.textBar = new TextBar(this.width, this.height);
         this.inputMove =  's';
+        this.ignoreLeft = false;
+        this.ignoreRight = false;
         this.score = 0;
         this.audio = new Audio("smash.mp3");
         this.lives = 3;
@@ -61,7 +62,7 @@ export default class Game {
 
     update(){
         this.paddle.update(this.inputMove);
-        this.result = this.ball.update(this.paddle.getX(), this.paddle.getHalfWidth(), this.inputMove, this.wall.getWall());
+        this.result = this.ball.update(this.paddle.getX(), this.paddle.getHalfWidth(), this.wall.getWall());
         if(this.result.collisionBrick) {
             this.audio.play();
             this.remainingBricks = this.wall.update(this.result.collisionBrick);
@@ -72,7 +73,7 @@ export default class Game {
         }
         if(this.result.ballDown){
             if(this.lives === 1) {
-                this.gameOverText = "GAME OVER!";
+                // this.gameOverText = "GAME OVER!";
             }
             this.lives--;
             this.ball.resetBall();
@@ -81,7 +82,10 @@ export default class Game {
             if(this.firstRound) {
                 if(this.ball.getPosition().y > this.height/2) {
                     this.wall.resetWall();
+                    this.paddle.makeHalfSize();
+                    this.remainingBricks = 8*8;
                     this.firstRound = false;
+                    this.textBar.upgradeRound();
                 }
             }
             else {
@@ -99,7 +103,7 @@ export default class Game {
         this.paddle.render(this.backBufferContext);
         this.wall.render(this.backBufferContext);
         this.ball.render(this.backBufferContext);
-        if(this.result.collisionBrick || this.result.ballDown) {
+        if((this.remainingBricks === 64) || this.result.collisionBrick || this.result.ballDown) {
             this.textBar.render(this.backBufferContext, this.score, this.lives);
         }
         this.screenBufferContext.drawImage(this.backBufferCanvas,0,0);
@@ -124,12 +128,12 @@ export default class Game {
     }
 
     loop() {
-        this.update();
-        this.render();
         if(this.gameOverText){
             this.renderGameOver();
             return;
         }
+        this.update();
+        this.render();
         requestAnimationFrame(this.loop);
     }
 
@@ -138,11 +142,21 @@ export default class Game {
         switch (event.key) {
             case 'a':
             case 'ArrowLeft':
-                this.inputMove = 'l';
+                if(this.inputMove === 'r'){
+                    this.ignoreRight = true;
+                }
+                if(!this.ignoreLeft) {
+                    this.inputMove = 'l';
+                }
                 break;
             case 'd':
             case 'ArrowRight':
-                this.inputMove = 'r';
+                if(this.inputMove === 'l'){
+                    this.ignoreLeft = true;
+                }
+                if(!this.ignoreRight) {
+                    this.inputMove = 'r';
+                }
                 break;
             case ' ':
                 if(this.gameOverText){
@@ -159,9 +173,17 @@ export default class Game {
         switch (event.key) {
             case 'a':
             case 'ArrowLeft':
+                if(this.inputMove === 'l') {
+                    this.inputMove = 's';
+                }
+                this.ignoreLeft = false;
+                break;
             case 'd':
             case 'ArrowRight':
-                this.inputMove = 's';
+                if(this.inputMove === 'r') {
+                    this.inputMove = 's';
+                }
+                this.ignoreRight = false;
         }
     }
 }

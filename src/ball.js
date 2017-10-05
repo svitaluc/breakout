@@ -48,7 +48,7 @@ export default class Ball {
         return collisionBrick;
     }
 
-    update(paddleX, paddleHalfWidth, move, wall){
+    update(paddleX, paddleHalfWidth, wall){
         var result = {
             collisionBrick: null,
             ballDown: false
@@ -61,21 +61,24 @@ export default class Ball {
             this.direction.y = -this.direction.y;
         }
         else if(this.position.y + this.direction.y > this.canvasHeight-80) {
-            if(this.position.x > paddleX-paddleHalfWidth && this.position.x < paddleX + paddleHalfWidth) {
+            if((this.position.x > paddleX-paddleHalfWidth) && (this.position.x < paddleX + paddleHalfWidth) && (this.direction.y > 0)) {
                 this.direction.y = -this.direction.y;
-                // if(move != 's') {
-                    this.direction.x = Math.sign(this.direction.x) * Math.round((Math.abs(paddleX - this.position.x) / 10 + 0.5) * 1000 / 1000);
-                // }
+                this.direction.x = Math.sign(this.direction.x) * Math.round((Math.abs(paddleX - this.position.x) / 10 + 0.5) * 1000 / 1000);
             }
             else {
-                if(this.position.y + this.direction.y > this.canvasHeight-40) {
+                if(this.position.y + this.direction.y > this.canvasHeight-55) {
                     result.ballDown = true;
                 }
             }
         }
         result.collisionBrick = this.hasCollision(wall);
         if(result.collisionBrick){
-            this.direction.y = -this.direction.y;
+            if((this.position.y > result.collisionBrick.y*25) && (this.position.y < (result.collisionBrick.y*25+25))) {
+                this.direction.x = -this.direction.x;
+            }
+            else {
+                this.direction.y = -this.direction.y;
+            }
         }
         this.position.x += this.direction.x;
         this.position.y += this.direction.y;

@@ -13,6 +13,11 @@ export default class Paddle {
         this.render = this.render.bind(this);
         this.getX = this.getX.bind(this);
         this.getHalfWidth = this.getHalfWidth.bind(this);
+        this.makeHalfSize = this.makeHalfSize.bind(this);
+    }
+
+    makeHalfSize(){
+        this.paddleHalfWidth /= 2;
     }
 
     getX(){

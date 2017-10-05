@@ -6,12 +6,12 @@ export default class TextBar {
         var positionY = canvasHeight - 13;
         this.score = {
             text: "Score: ",
-            x: 20,
+            x: canvasWidth/2-50,
             y: positionY
         };
         this.title = {
             text: "GO CATS! Breakout",
-            x: canvasWidth/2,
+            x: 20,
             y: positionY
         };
         this.lives = {
@@ -19,9 +19,20 @@ export default class TextBar {
             x: canvasWidth - 25,
             y: positionY
         };
+        this.round = {
+            text: "Round: ",
+            number: 1,
+            x: canvasWidth/2 + 100,
+            y: positionY
+        };
 
         // Bind class functions
         this.render = this.render.bind(this);
+        this.upgradeRound = this.upgradeRound.bind(this);
+    }
+
+    upgradeRound(){
+        this.round.number++;
     }
 
     render(ctx, score, lives){
@@ -31,9 +42,11 @@ export default class TextBar {
         ctx.fillStyle = '#4B0082';
         ctx.font = 'bold 30px arial';
         ctx.textAlign = "left";
-        ctx.fillText(this.score.text + score, this.score.x, this.score.y);
-        ctx.textAlign = "center";
         ctx.fillText(this.title.text, this.title.x, this.title.y);
+        ctx.font = 'bold 27px arial';
+        ctx.fillText(this.score.text + score, this.score.x, this.score.y);
+        ctx.textAlign = "left";
+        ctx.fillText(this.round.text + this.round.number +"/2", this.round.x, this.round.y);
         ctx.textAlign = "right";
         ctx.fillText(this.lives.text + lives, this.lives.x, this.lives.y);
         ctx.restore();
