@@ -55,6 +55,9 @@ export default class Game {
         this.ignoreRight = false;
         this.score = 0;
         this.audio = new Audio("smash.mp3");
+        this.audioSad = new Audio("sad_trombone.mp3");
+        this.audioVictory = new Audio("tada.mp3");
+        this.audioFailure = new Audio("failure.mp3");
         this.lives = 3;
         this.firstRound = true;
         this.gameOverText = null;
@@ -73,10 +76,12 @@ export default class Game {
         }
         if(this.result.ballDown){
             if(this.lives === 1) {
-                // this.gameOverText = "GAME OVER!";
+                this.gameOverText = "YOU LOST!";
+                this.audioFailure.play();
             }
             this.lives--;
             this.ball.resetBall();
+            this.audioSad.play();
         }
         if(this.remainingBricks < 1){
             if(this.firstRound) {
@@ -90,6 +95,7 @@ export default class Game {
             }
             else {
                 this.gameOverText = "YOU WIN!";
+                this.audioVictory.play();
             }
         }
     }

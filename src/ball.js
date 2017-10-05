@@ -9,6 +9,7 @@ export default class Ball {
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
         this.bricksPerRow = bricksPerRow;
+        this.audioBounce = new Audio("bounce.mp3");
 
         // Bind class functions
         this.update = this.update.bind(this);
@@ -56,14 +57,17 @@ export default class Ball {
         if(this.position.x + this.direction.x < this.radius
             || this.position.x + this.direction.x > this.canvasWidth-this.radius) {
             this.direction.x = -this.direction.x;
+            this.audioBounce.play();
         }
         if(this.position.y + this.direction.y < this.radius) {
             this.direction.y = -this.direction.y;
+            this.audioBounce.play();
         }
         else if(this.position.y + this.direction.y > this.canvasHeight-80) {
             if((this.position.x > paddleX-paddleHalfWidth) && (this.position.x < paddleX + paddleHalfWidth) && (this.direction.y > 0)) {
                 this.direction.y = -this.direction.y;
                 this.direction.x = Math.sign(this.direction.x) * Math.round((Math.abs(paddleX - this.position.x) / 10 + 0.5) * 1000 / 1000);
+                this.audioBounce.play();
             }
             else {
                 if(this.position.y + this.direction.y > this.canvasHeight-55) {
