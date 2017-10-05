@@ -35,13 +35,13 @@ export default class Wall {
     }
 
     update(collisionBrick){
-        this.wall[collisionBrick.x][collisionBrick.y] = false;
+        this.wall[collisionBrick.y][collisionBrick.x] = false;
         this.remainingBricks--;
         return this.remainingBricks;
     }
 
     render(ctx){
-        var brickWidth = ctx.canvas.width/this.bricksPerRow;
+        var brickWidth = (ctx.canvas.width-7)/this.bricksPerRow;
         var brickHeight = ctx.canvas.height/20;
 
         for(var i = 0; i < 8; i++){
@@ -76,8 +76,8 @@ export default class Wall {
                         ctx.fillStyle = (j % 2 === 0)? '#FFFF99' : 'yellow';
                         break;
                 }
-                ctx.clearRect(j + brickWidth * j, i + brickHeight * i, brickWidth, brickHeight);
-                ctx.fillRect(j + brickWidth * j, i + brickHeight * i, brickWidth, brickHeight);
+                ctx.clearRect(j+brickWidth * j, i + brickHeight * i, brickWidth, brickHeight);
+                ctx.fillRect(j+brickWidth * j, i + brickHeight * i, brickWidth, brickHeight);
                 ctx.restore();
             }
         }

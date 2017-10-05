@@ -38,7 +38,6 @@ export default class Game {
         // Bind class functions
 
         // Start the game loop
-        // this.interval = setInterval(this.loop, 10);
         this.loop();
     }
 
@@ -88,6 +87,7 @@ export default class Game {
                 if(this.ball.getPosition().y > this.height/2) {
                     this.wall.resetWall();
                     this.paddle.makeHalfSize();
+                    this.ball.upgradeSecondRound();
                     this.remainingBricks = 8*8;
                     this.firstRound = false;
                     this.textBar.upgradeRound();
